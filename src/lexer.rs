@@ -1,7 +1,7 @@
 use logos::Logos;
 
-#[derive(Logos)]
-enum TokenKind {
+#[derive(Logos, PartialEq, Debug)]
+pub(crate) enum TokenKind {
     #[token("SUS")]
     Sus,
 
