@@ -8,13 +8,16 @@ pub(crate) enum TokenKind {
     #[token("VENTED")]
     Vented,
 
+    #[token("SUSSY")]
+    Sussy,
+
     #[token("ELECTRICAL")]
     Electrical,
 
     #[regex("WHO\\??")]
     Who,
 
-    #[token("WHERE\\??")]
+    #[regex("WHERE\\??")]
     Where,
 
     #[token("RED")]

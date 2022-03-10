@@ -1,19 +1,25 @@
 use crate::lexer::TokenKind;
+use std::iter::Peekable;
 
-pub(crate) fn parse(mut tokens: impl Iterator<Item = TokenKind>) -> Vec<Statement> {
-    parse_inner(tokens, true)
+pub(crate) fn parse(tokens: logos::Lexer<'_, TokenKind>) -> Vec<Statement> {
+    parse_inner(&mut tokens.peekable(), true)
 }
 
-fn parse_inner(mut tokens: impl Iterator<Item = TokenKind>, top_level: bool) -> Vec<Statement> {
+fn parse_inner(
+    tokens: &mut Peekable<logos::Lexer<'_, TokenKind>>,
+    top_level: bool,
+) -> Vec<Statement> {
     let mut statements = Vec::new();
-    while let Some(token) = tokens.next() {
+    while let Some(token) = tokens.peek() {
         statements.push(match token {
             TokenKind::Sus => Statement::Sus,
             TokenKind::Vented => Statement::Vented,
+            TokenKind::Sussy => Statement::Sussy,
             TokenKind::Electrical => Statement::Electrical,
             TokenKind::Who => {
-                let s = parse_inner(&mut tokens, false);
-                assert_eq!(tokens.next(), Some(TokenKind::Where));
+                tokens.next();
+                let s = parse_inner(tokens, false);
+                assert_eq!(tokens.peek(), Some(&TokenKind::Where));
                 Statement::Block(s)
             }
             TokenKind::Where if top_level => todo!(),
@@ -30,13 +36,15 @@ fn parse_inner(mut tokens: impl Iterator<Item = TokenKind>, top_level: bool) -> 
             TokenKind::Lime => Statement::Lime,
             TokenKind::Pink => Statement::Pink,
             TokenKind::Orange => Statement::Orange,
-            TokenKind::Error => todo!(), // Error handling 💯
+            TokenKind::Error => panic!(), // Error handling 💯
         });
+        tokens.next();
     }
 
     statements
 }
 
+#[derive(Debug)]
 pub(crate) enum Statement {
     Sus,
     Vented,
