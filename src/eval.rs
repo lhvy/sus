@@ -41,16 +41,17 @@ fn inner_eval(statements: &[Statement], memory: &mut Memory) {
                     memory.stack.pop();
                 }
                 Some(Color::Green) => {
-                    print!("{}", *memory.stack.last().unwrap() as char);
+                    print!("{}", *memory.stack.last().unwrap_or(&0) as char);
                     std::io::stdout().flush().unwrap();
                 }
                 Some(Color::Yellow) => {
                     let mut buf = [0];
                     match std::io::stdin().read_exact(&mut buf) {
-                        Ok(_) => memory.stack.push(buf[0]),
+                        Ok(_) => {}
                         Err(e) if e.kind() == std::io::ErrorKind::UnexpectedEof => {}
                         Err(_) => todo!(),
                     };
+                    memory.stack.push(buf[0]);
                 }
                 Some(Color::Cyan) => {
                     for _ in 0..(rand::thread_rng().gen_range(0..=memory.acc1.0)) {
@@ -58,11 +59,11 @@ fn inner_eval(statements: &[Statement], memory: &mut Memory) {
                     }
                 }
                 Some(Color::Black) => {
-                    print!("{}", memory.stack.last().unwrap());
+                    print!("{}", memory.stack.last().unwrap_or(&0));
                     std::io::stdout().flush().unwrap();
                 }
                 Some(Color::White) => memory.acc1 -= Wrapping(1),
-                Some(Color::Brown) => memory.acc1 = Wrapping(*memory.stack.last().unwrap()),
+                Some(Color::Brown) => memory.acc1 = Wrapping(*memory.stack.last().unwrap_or(&0)),
                 Some(Color::Lime) => *memory.stack.last_mut().unwrap() *= 2,
                 Some(Color::Pink) => memory.acc1 = Wrapping(0),
                 Some(Color::Orange) => memory.acc1 += Wrapping(10),
@@ -72,7 +73,7 @@ fn inner_eval(statements: &[Statement], memory: &mut Memory) {
             Statement::Sussy => memory.acc2 -= Wrapping(1),
             Statement::Electrical => memory.acc2 = Wrapping(0),
             Statement::Block(s) => {
-                while *memory.stack.last().unwrap() != memory.acc2.0 {
+                while *memory.stack.last().unwrap_or(&0) != memory.acc2.0 {
                     inner_eval(s, memory);
                 }
             }

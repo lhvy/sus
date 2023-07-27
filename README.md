@@ -3,6 +3,7 @@
 > WIP Interpreter for "Among Us" Esoteric Programming Language
 
 Documentation for the language can be found [here](https://esolangs.org/wiki/Among_Us).
+Reference implementation can be found [here](https://zeroplayerzombie.neocities.org/amongus.txt).
 
 ## Installation
 
@@ -10,7 +11,9 @@ WIP - Binaries and homebrew tap coming soon™️
 
 ## Examples
 
-###### Cat Program
+More examples can be found at `examples/`.
+
+### Cat Program
 
 ```amongus
 RED SUS
@@ -21,7 +24,7 @@ GREEN SUS
 WHERE?
 ```
 
-###### Hello World
+### Hello World
 
 ```amongus
 ORANGE SUS
